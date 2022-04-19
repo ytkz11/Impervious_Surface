@@ -14,20 +14,21 @@ def main(path, out):
     geoTransform = g_set.GetGeoTransform()
     ListgeoTransform = list(geoTransform)
     ListgeoTransform[5] = -ListgeoTransform[5]
-    newgeoTransform = tuple(ListgeoTransform)
+    Transform = tuple(ListgeoTransform)
     proj = g_set.GetProjection()
     cols = g_set.RasterXSize
     rows = g_set.RasterYSize
-    tiffile = os.path.splitext(tif_list)[0] + '.tiff'
+    proj1 = IDataSet.GetProjection()
+    tiffile = os.path.splitext(tif_list[0])[0] + '.tif'
 
-    tarpath = os.path.join(main, os.path.basename(tiffile))
+    tarpath = os.path.join(out, os.path.basename(tiffile))
     format = "GTiff"
     driver = gdal.GetDriverByName(format)
 
     bandnum = 4
     indexset = driver.Create(tarpath, cols, rows, bandnum, gdal.GDT_Int32)
-
-
+    indexset.SetGeoTransform(Transform)
+    indexset.SetProjection(proj1)
     for i in range(bandnum):
         ds = gdal.Open(tif_list[i])
         banddata = ds.GetRasterBand(1).ReadAsArray()

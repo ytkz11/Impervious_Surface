@@ -34,7 +34,7 @@ class sentinel2_to_one_tif:
         if os.path.basename(file_dir).split('_')[1] == "MSIL1C":
             band = [1, 2, 3, 4]  #
         elif os.path.basename(file_dir).split('_')[1] == "MSIL2A":
-            band = [5, 6, 7, 3]
+            band = [0, 1, 2, 3]
         banddata, info = self.read_jp2(imgfile[band[0]])
 
         tiffile = os.path.splitext(SAFE_PATH)[0] + '.tiff'

@@ -14,7 +14,6 @@ import numpy as np
 import os
 from matplotlib import pyplot as plt
 
-
 def saveTif(array, cols, rows, driver, proj, Transform, filename):
     '''
 
