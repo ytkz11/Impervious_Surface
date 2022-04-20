@@ -3,16 +3,17 @@
 # @Time : 2022/4/19 16:01 
 # @Author : DKY
 # @File : Impervious_Surface.py
-#!/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Time : 2022/3/30 10:21
 # @Author : DKY
-# @File : extract_water.py
+# @File : extract_Impervious_Surface.py
 
 from osgeo import gdal
 import numpy as np
 import os
 from matplotlib import pyplot as plt
+
 
 def saveTif(array, cols, rows, driver, proj, Transform, filename):
     '''
@@ -134,15 +135,13 @@ def determinate_band(path):
 
 def indexCompute(arr):
     # g^4/(nir*r)^2
-    blue, green, red, nir = arr[:,:,0],arr[:,:,1],arr[:,:,2],arr[:,:,3]
-    num = [-1.65968, 11.43194, -9.85259, -0.58029]  # water
+    blue, green, red, nir = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2], arr[:, :, 3]
 
-    num =  [0.45008409,  0.11961939,  0.35736162, -1.76948519]   # building
-    index = num[0] * np.divide(((green*blue)**2), (nir*red) ** 2) + \
-            num[1] * np.divide((green**2**2), (nir*red) ** 2) + \
-            num[2] * np.divide(green**2, (nir) ** 2) + \
-            num[3] * np.divide(green**2, (red) ** 2)
-
+    num = [-0.20233757, 0.79708262, -0.87422614, -0.41915075]  # building
+    index = num[0] * np.divide(((green * blue) ** 1), (nir * red) ** 1) + \
+            num[1] * np.divide((green ** 2 ** 1), (nir * red) ** 1) + \
+            num[2] * np.divide(green ** 1, (nir) ** 1) + \
+            num[3] * np.divide(green ** 1, (red) ** 1)
 
     return index
 
@@ -157,12 +156,10 @@ def testindexCompute(arr):
     for i in range(z):
         arr_total = arr_total + arr[:, :, i]
 
-    plt.imshow(arr_total), plt.show()
+    # plt.imshow(arr_total), plt.show()
     index = np.divide(arr_total, (123 * 6))
 
     return index
-
-
 
 
 def read_img(path):
@@ -197,7 +194,7 @@ def read_img(path):
     indexname = os.path.splitext(tif_list[0])[0] + '_index.tif'
     # index = np.where(index ==0,np.nan , index)
     saveTif(index, cols, rows, driver, proj, newgeoTransform, indexname)
-    L9name = os.path.splitext(tif_list[0])[0] + '_superposition.tif'
+    L9name = os.path.splitext(tif_list[0])[0] + '_superposition_normal.tif'
 
     # a = np.zeros(rows, cols)
     a = index
@@ -212,7 +209,7 @@ def read_img(path):
         for i in range(len(tif_list)):
             dataset = gdal.Open(tif_list[i])
             data = dataset.GetRasterBand(1).ReadAsArray()
-            data = linear_stretch_1(data)
+            # data = linear_stretch_1(data)
 
             band = ds.GetRasterBand(i + 1)
             band.WriteArray(data, 0, 0)
@@ -220,8 +217,11 @@ def read_img(path):
     a = 0
     return index
 
+
 if __name__ == "__main__":
     path = r'X:\DengKaiYuan\L9\pole'  # 冰川
-    path = r'X:\DengKaiYuan\L9\wuzhou'  # 梧州
+    path = r'D:\dengkaiyuan\data\S2\LC09_L2SP_202023_20220319_20220323_02_T1'  # 英国
+    # path = r'X:\DengKaiYuan\L9\wuzhou'  # 梧州
+    path = r'X:\DengKaiYuan\L9\LC09_L2SP_044034_20220417_20220419_02_T1'  # 洛杉矶
     a = read_img(path)
     A = 0

@@ -18,7 +18,7 @@ def main(path, out):
     proj = g_set.GetProjection()
     cols = g_set.RasterXSize
     rows = g_set.RasterYSize
-    proj1 = IDataSet.GetProjection()
+    proj1 = g_set.GetProjection()
     tiffile = os.path.splitext(tif_list[0])[0] + '.tif'
 
     tarpath = os.path.join(out, os.path.basename(tiffile))
