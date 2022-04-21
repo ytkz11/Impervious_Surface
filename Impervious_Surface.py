@@ -217,7 +217,7 @@ def read_img(path):
 
 
 if __name__ == "__main__":
-    path = r'X:\DengKaiYuan\L9\pole2'  # 冰川
+    path = r'X:\DengKaiYuan\L9\pole3'  # 冰川
     # path = r'D:\dengkaiyuan\data\S2\LC09_L2SP_202023_20220319_20220323_02_T1'  # 英国
     # path = r'X:\DengKaiYuan\L9\wuzhou'  # 梧州
     # path = r'X:\DengKaiYuan\L9\LC09_L2SP_044034_20220417_20220419_02_T1'  # 洛杉矶
