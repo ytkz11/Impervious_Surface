@@ -3,11 +3,7 @@
 # @Time : 2022/4/19 16:01 
 # @Author : DKY
 # @File : Impervious_Surface.py
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time : 2022/3/30 10:21
-# @Author : DKY
-# @File : extract_Impervious_Surface.py
+# extract_Impervious_Surface
 
 from osgeo import gdal
 import numpy as np
@@ -137,11 +133,12 @@ def indexCompute(arr):
     # g^4/(nir*r)^2
     blue, green, red, nir = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2], arr[:, :, 3]
 
-    num = [-0.20233757, 0.79708262, -0.87422614, -0.41915075]  # building
-    index = num[0] * np.divide(((green * blue) ** 1), (nir * red) ** 1) + \
-            num[1] * np.divide((green ** 2 ** 1), (nir * red) ** 1) + \
-            num[2] * np.divide(green ** 1, (nir) ** 1) + \
-            num[3] * np.divide(green ** 1, (red) ** 1)
+    num = [-0.5, 4, -0.5, -6]  # building
+    # index = num[0] * np.divide(((green * blue) ** 1), (nir * red) ** 1) + \
+    #         num[1] * np.divide((green ** 2 ** 1), (nir * red) ** 1) + \
+    #         num[2] * np.divide(green ** 1, (nir) ** 1) + \
+    #         num[3] * np.divide(green ** 1, (red) ** 1)
+    index = np.divide((3 * green - blue + 2 * red - 5 * nir), 1)#(3 * green + blue + 2 * red + 5 * nir))
 
     return index
 
@@ -195,6 +192,7 @@ def read_img(path):
     # index = np.where(index ==0,np.nan , index)
     saveTif(index, cols, rows, driver, proj, newgeoTransform, indexname)
     L9name = os.path.splitext(tif_list[0])[0] + '_superposition_normal.tif'
+    # L9name = os.path.splitext(tif_list[0])[0] + '_superposition_normal_255.tif'
 
     # a = np.zeros(rows, cols)
     a = index
@@ -219,9 +217,9 @@ def read_img(path):
 
 
 if __name__ == "__main__":
-    path = r'X:\DengKaiYuan\L9\pole'  # 冰川
-    path = r'D:\dengkaiyuan\data\S2\LC09_L2SP_202023_20220319_20220323_02_T1'  # 英国
+    path = r'X:\DengKaiYuan\L9\pole2'  # 冰川
+    # path = r'D:\dengkaiyuan\data\S2\LC09_L2SP_202023_20220319_20220323_02_T1'  # 英国
     # path = r'X:\DengKaiYuan\L9\wuzhou'  # 梧州
-    path = r'X:\DengKaiYuan\L9\LC09_L2SP_044034_20220417_20220419_02_T1'  # 洛杉矶
+    # path = r'X:\DengKaiYuan\L9\LC09_L2SP_044034_20220417_20220419_02_T1'  # 洛杉矶
     a = read_img(path)
     A = 0
